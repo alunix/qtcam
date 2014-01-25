@@ -11,13 +11,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = qtcam
 TEMPLATE = app
 
+QMAKE_CXXFLAGS_RELEASE = -DNDEBUG
 
 SOURCES += main.cpp\
 		mainwindow.cpp \
 	previewdisplay.cpp
 
 HEADERS  += mainwindow.h \
-	previewdisplay.h
+	previewdisplay.h \
+	logutil.h
 
 LIBS += /usr/lib/libopencv_highgui.so \
 		/usr/lib/libopencv_imgproc.so \

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/imgproc/imgproc_c.h>
+#include "logutil.h"
 
 class PreviewDisplay : public QWidget
 {
@@ -18,7 +19,7 @@ public:
 
 private:
 	const IplImage *frame_source;
-	CvMat *swap;
+	CvMat *rgb_image;
 };
 
 #endif // PREVIEWDISPLAY_H

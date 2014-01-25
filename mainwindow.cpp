@@ -5,6 +5,8 @@
 #include <opencv2/imgproc/imgproc_c.h>
 
 #define FPS 25
+#define WIDTH 640
+#define HEIGHT 480
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -15,14 +17,26 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 
 	capture = cvCreateCameraCapture(CV_CAP_ANY);
-	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 640);
-	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 480);
-	ui->preview->set_frame_property(480, 640, CV_8UC3);
+	if (!capture) {
+		LOGE("cvCreateCameraCapture() returned NULL");
+		return;
+	}
+	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, WIDTH);
+	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, HEIGHT);
+	ui->preview->set_frame_property(HEIGHT, WIDTH, CV_8UC3);
 
 	connect(preview_timer, SIGNAL(timeout()), this, SLOT(update_preview()));
 	preview_timer->setInterval(1000 / FPS);
 	preview_timer->start();
 
+}
+
+bool MainWindow::init_ok()
+{
+	if (!capture) {
+		return false;
+	}
+	return true;
 }
 
 MainWindow::~MainWindow()
@@ -41,6 +55,7 @@ void MainWindow::update_preview()
 
 	f = cvQueryFrame(capture);
 	if (f == NULL) {
+		LOGW("cvQueryFrame() returned NULL");
 		return;
 	}
 
