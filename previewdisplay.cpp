@@ -47,6 +47,8 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 
 	cvCvtColor(frame_source, rgb_image, CV_BGR2RGB);
 
+	const int w = width();
+	const int h = height();
 	QPainter painter(this);
 	QImage image((const uchar *)rgb_image->data.ptr,
 				 rgb_image->width,
@@ -54,10 +56,11 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 				 QImage::Format_RGB888);
 
 	image = image.scaled(640, 480, Qt::KeepAspectRatio);
-	painter.translate(width() / 2, height() / 2);
+	painter.translate(w / 2, h / 2);
+	painter.fillRect(-w / 2, -h / 2, w, h, Qt::darkGray);
 	painter.scale(x_scale, y_scale);
 	painter.rotate(rotate_angle);
-	painter.drawImage(-width() / 2, -height() / 2, image);
+	painter.drawImage(-w / 2, -h / 2, image);
 }
 
 void PreviewDisplay::rotate(int angle)
