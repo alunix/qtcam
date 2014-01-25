@@ -20,10 +20,19 @@ public:
 	virtual ~MainWindow();
 	virtual bool init_ok();
 
+public slots:
+	void take_shot();
+	void grab_preview();
+
 protected slots:
 	void update_preview();
+	void rotate(int angle);
+	void scale_x(int xs);
+	void scale_y(int ys);
 
 private:
+	QString get_filename();
+
 	Ui::MainWindow *ui;
 	QTimer *preview_timer; // for freshing preview.
 	CvCapture *capture;
