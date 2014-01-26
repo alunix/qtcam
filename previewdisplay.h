@@ -20,6 +20,7 @@ public:
 	void rotate(int angle);
 	void scale_x(qreal xs);
 	void scale_y(qreal ys);
+	void zoom_image(qreal z);
 
 private:
 	const IplImage *frame_source;
@@ -27,6 +28,7 @@ private:
 	int rotate_angle;
 	qreal x_scale;
 	qreal y_scale;
+	qreal zoom;
 };
 
 #endif // PREVIEWDISPLAY_H

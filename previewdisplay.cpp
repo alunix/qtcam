@@ -11,7 +11,8 @@ PreviewDisplay::PreviewDisplay(QWidget *parent) :
 	rgb_image(0),
 	rotate_angle(0),
 	x_scale(1),
-	y_scale(1)
+	y_scale(1),
+	zoom(1)
 {
 }
 
@@ -49,18 +50,20 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 
 	const int w = width();
 	const int h = height();
+	const int wz = w * zoom;
+	const int hz = h * zoom;
 	QPainter painter(this);
 	QImage image((const uchar *)rgb_image->data.ptr,
 				 rgb_image->width,
 				 rgb_image->height,
 				 QImage::Format_RGB888);
 
-	image = image.scaled(640, 480, Qt::KeepAspectRatio);
+	image = image.scaled(wz, hz, Qt::KeepAspectRatio);
 	painter.translate(w / 2, h / 2);
 	painter.fillRect(-w / 2, -h / 2, w, h, Qt::darkGray);
 	painter.scale(x_scale, y_scale);
 	painter.rotate(rotate_angle);
-	painter.drawImage(-w / 2, -h / 2, image);
+	painter.drawImage(-wz / 2, -hz / 2, image);
 }
 
 void PreviewDisplay::rotate(int angle)
@@ -75,4 +78,9 @@ void PreviewDisplay::scale_x(qreal xs)
 void PreviewDisplay::scale_y(qreal ys)
 {
 	y_scale = ys;
+}
+
+void PreviewDisplay::zoom_image(qreal z)
+{
+	zoom = z;
 }

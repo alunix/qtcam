@@ -9,8 +9,8 @@
 #include <QMessageBox>
 
 #define FPS 25
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 1280
+#define HEIGHT 960
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->slider_rotate, SIGNAL(valueChanged(int)), this, SLOT(rotate(int)));
 	connect(ui->slider_x_scale, SIGNAL(valueChanged(int)), this, SLOT(scale_x(int)));
 	connect(ui->slider_y_scale, SIGNAL(valueChanged(int)), this, SLOT(scale_y(int)));
+	connect(ui->slider_zoom, SIGNAL(valueChanged(int)), this, SLOT(zoom(int)));
 	connect(ui->pb_take_shot, SIGNAL(clicked()), this, SLOT(take_shot()));
 	connect(ui->pb_grab_preview, SIGNAL(clicked()), this, SLOT(grab_preview()));
 	connect(preview_timer, SIGNAL(timeout()), this, SLOT(update_preview()));
@@ -169,4 +170,11 @@ void MainWindow::scale_y(int ys)
 	qreal y_scale = ys / 10.0;
 	ui->label_y_scale->setText(QString::number(y_scale));
 	ui->preview->scale_y(y_scale);
+}
+
+void MainWindow::zoom(int z)
+{
+	qreal zoom_d = z / 5.0;
+	ui->label_zoom->setText(QString::number(zoom_d));
+	ui->preview->zoom_image(zoom_d);
 }

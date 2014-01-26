@@ -29,6 +29,7 @@ protected slots:
 	void rotate(int angle);
 	void scale_x(int xs);
 	void scale_y(int ys);
+	void zoom(int z);
 
 private:
 	QString get_filename();
