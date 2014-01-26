@@ -52,6 +52,8 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 	const int h = height();
 	const int wz = w * zoom;
 	const int hz = h * zoom;
+	QColor transparent(0, 0, 0, 0);
+	QBrush brush(transparent);
 	QPainter painter(this);
 	QImage image((const uchar *)rgb_image->data.ptr,
 				 rgb_image->width,
@@ -60,7 +62,11 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 
 	image = image.scaled(wz, hz, Qt::KeepAspectRatio);
 	painter.translate(w / 2, h / 2);
-	painter.fillRect(-w / 2, -h / 2, w, h, Qt::darkGray);
+	painter.fillRect(-w / 2, -h / 2, w, h, Qt::black);
+	painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+	painter.setBrush(brush);
+	painter.drawEllipse(-w / 2 + 50, -h / 2 + 50 , w - 100, h - 100);
+	painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
 	painter.scale(x_scale, y_scale);
 	painter.rotate(rotate_angle);
 	painter.drawImage(-wz / 2, -hz / 2, image);
