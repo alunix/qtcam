@@ -73,7 +73,6 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 	painter.scale(x_scale, y_scale);
 	painter.rotate(rotate_angle);
 	painter.drawImage(-wz / 2, -hz / 2, image);
-	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 }
 
 void PreviewDisplay::drawCoordinates(QPainter &painter)
