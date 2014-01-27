@@ -23,6 +23,8 @@ public:
 	void zoom_image(qreal z);
 
 private:
+	void drawCoordinates(QPainter &painter);
+
 	const IplImage *frame_source;
 	CvMat *rgb_image;
 	int rotate_angle;

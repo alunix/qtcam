@@ -1,5 +1,6 @@
 #include <QPainter>
 #include <QImage>
+#include <QStaticText>
 #include "previewdisplay.h"
 #include <opencv2/core/core_c.h>
 
@@ -52,6 +53,7 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 	const int h = height();
 	const int wz = w * zoom;
 	const int hz = h * zoom;
+	const int radius = (w > h ? h : w) / 2 - 50;
 	QColor transparent(0, 0, 0, 0);
 	QBrush brush(transparent);
 	QPainter painter(this);
@@ -65,11 +67,72 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 	painter.fillRect(-w / 2, -h / 2, w, h, Qt::black);
 	painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
 	painter.setBrush(brush);
-	painter.drawEllipse(-w / 2 + 50, -h / 2 + 50 , w - 100, h - 100);
+	painter.drawEllipse(-radius, -radius, radius * 2, radius * 2);
 	painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+	drawCoordinates(painter);
 	painter.scale(x_scale, y_scale);
 	painter.rotate(rotate_angle);
 	painter.drawImage(-wz / 2, -hz / 2, image);
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+}
+
+void PreviewDisplay::drawCoordinates(QPainter &painter)
+{
+	const int w = width();
+	const int half_w = w / 2;
+	const int h = height();
+	const int half_h = h / 2;
+	const int ratio = 10;
+	const int range_y = half_h / ratio;
+	const int range_x = half_w / ratio;
+	const int len = 5;
+	const int len5 = len + 5;
+
+	// draw coordinates
+	painter.setPen(Qt::green);
+	// We draw X, Y axes in a transformed coordinate system.
+	painter.drawLine(0, half_h, 0, -half_h); // Y-axis
+	painter.drawLine(-half_w, 0, half_w, 0); // X-axis
+	painter.drawStaticText(-10, -half_h + 10, QStaticText(QString("y")));
+	painter.drawStaticText(half_w - 10, 10, QStaticText(QString("x")));
+
+	for (int i = range_y; i > 0; i--) {
+		if ((i % 5) == 0) {
+			painter.drawLine(0, -i * ratio, len5, -i * ratio);
+			painter.drawStaticText(len5, -i * ratio, QStaticText(QString::number(i)));
+		} else {
+			painter.drawLine(0, -i * ratio, len, -i * ratio);
+		}
+	}
+
+	for (int i = range_y; i > 0; i--) {
+		if ((i % 5) == 0) {
+			painter.drawLine(0, i * ratio, len5, i * ratio);
+			painter.drawStaticText(len5, i * ratio, QStaticText(QString::number(-i)));
+		} else {
+			painter.drawLine(0, i * ratio, len, i * ratio);
+		}
+	}
+
+	for (int i = range_x; i > 0; i--) {
+		if ((i % 5) == 0) {
+			painter.drawLine(i * ratio, 0, i * ratio, -len5);
+			painter.drawStaticText(ratio * i, 0, QStaticText(QString::number(i)));
+		} else {
+			painter.drawLine(i * ratio, 0, i * ratio, -len);
+		}
+	}
+
+	for (int i = range_x; i > 0; i--) {
+		if ((i % 5) == 0) {
+			painter.drawLine(-i * ratio, 0, -i * ratio, -len5);
+			painter.drawStaticText(ratio * (-i), 0, QStaticText(QString::number(-i)));
+		} else {
+			painter.drawLine(-i * ratio, 0, -i * ratio, -len);
+		}
+	}
+
+	painter.drawStaticText(5, 0, QStaticText("0"));
 }
 
 void PreviewDisplay::rotate(int angle)
