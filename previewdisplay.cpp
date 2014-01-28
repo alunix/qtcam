@@ -63,6 +63,7 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 				 QImage::Format_RGB888);
 
 	image = image.scaled(wz, hz, Qt::KeepAspectRatio);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(w / 2, h / 2);
 	painter.fillRect(-w / 2, -h / 2, w, h, Qt::black);
 	painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
