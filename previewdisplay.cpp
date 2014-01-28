@@ -59,6 +59,7 @@ void PreviewDisplay::paintEvent(QPaintEvent *)
 				 QImage::Format_RGB888);
 
 	image = image.scaled(wz, hz, Qt::KeepAspectRatio);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(w / 2, h / 2);
 	painter.fillRect(-w / 2, -h / 2, w, h, Qt::darkGray);
 	painter.scale(x_scale, y_scale);
