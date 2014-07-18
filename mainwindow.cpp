@@ -139,7 +139,7 @@ QString MainWindow::get_filename()
 	if (!home) {
 		return QString("");
 	}
-	home_stripped = QString::fromAscii(home);
+	home_stripped = QString::fromLatin1(home);
 	if (home_stripped.endsWith('/')) {
 		home_stripped.chop(1);
 	}
